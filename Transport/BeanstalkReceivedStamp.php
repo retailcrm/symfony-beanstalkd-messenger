@@ -26,9 +26,6 @@ class BeanstalkReceivedStamp implements NonSendableStampInterface
         return $this->tube;
     }
 
-    /**
-     * @return JobIdInterface
-     */
     public function getJob(): JobIdInterface
     {
         return $this->job;

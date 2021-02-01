@@ -57,7 +57,8 @@ class Connection
     {
         unset($options['transport_name']);
 
-        if (false === $parsedUrl = parse_url($dsn)) {
+        $parsedUrl = parse_url($dsn);
+        if (false === $parsedUrl) {
             throw new InvalidArgumentException(sprintf('The given Pheanstalk DSN "%s" is invalid.', $dsn));
         }
 
