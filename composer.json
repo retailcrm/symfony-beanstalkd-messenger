@@ -1,0 +1,37 @@
+{
+    "name": "retailcrm/symfony-beansltalkd-messenger",
+    "description": "Symfony Beanstalkd Messenger Bridge",
+    "type": "symfony-bridge",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "RetailCRM",
+            "email": "support@retailcrm.pro"
+        }
+    ],
+    "support": {
+        "email": "support@retailcrm.pro"
+    },
+    "autoload": {
+        "psr-4": { "RetailCrm\\Messenger\\Beanstalkd\\": "" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "ext-json": "*",
+        "php": ">=7.2",
+        "pda/pheanstalk": "^4.0",
+        "symfony/messenger": "^5.2"
+    },
+    "require-dev": {
+        "phpmd/phpmd": "^2.9",
+        "squizlabs/php_codesniffer": "^3.5",
+        "phpunit/phpunit": "^9.5"
+    },
+    "scripts": {
+        "phpmd": "./vendor/bin/phpmd Transport text controversial,./phpmd.xml",
+        "phpcs": "./vendor/bin/phpcs -p Transport --runtime-set testVersion 7.2-8.0"
+    }
+}
