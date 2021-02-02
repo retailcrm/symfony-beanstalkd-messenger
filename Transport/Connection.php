@@ -103,6 +103,11 @@ class Connection
         return $this->timeout;
     }
 
+    public function isNotSendIfExists(): bool
+    {
+        return $this->notSendIfExists;
+    }
+
     public function get(): ?Job
     {
         try {
@@ -120,11 +125,6 @@ class Connection
     public function reject(JobIdInterface $job): void
     {
         $this->delete($job);
-    }
-
-    public function isNotSendIfExists(): bool
-    {
-        return $this->notSendIfExists;
     }
 
     public function send(string $message, int $delay = 0): void

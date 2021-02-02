@@ -32,6 +32,7 @@
     },
     "scripts": {
         "phpmd": "./vendor/bin/phpmd Transport text controversial,./phpmd.xml",
-        "phpcs": "./vendor/bin/phpcs -p Transport --runtime-set testVersion 7.2-8.0"
+        "phpcs": "./vendor/bin/phpcs -p Transport --runtime-set testVersion 7.2-8.0",
+        "tests": "./vendor/bin/phpunit -c phpunit.xml.dist"
     }
 }
