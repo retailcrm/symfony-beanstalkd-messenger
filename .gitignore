@@ -50,3 +50,12 @@
 
 # Embedded web-server pid file
 /.web-server-pid
+
+composer.lock
+
+.php_cs.cache
+.phpunit.result.cache
+test-report.xml
+coverage.xml
+
+.idea
