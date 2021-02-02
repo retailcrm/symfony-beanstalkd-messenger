@@ -40,6 +40,6 @@ framework:
 
 * `ttr` - ttr value for jobs. Default - 60
 
-* `not_send_if_exists` - do not send a job to the queue only if such a job is already in the queue. Default - `true`
+* `not_send_if_exists` - do not send a job to the queue only if such a job is already exist. Default - `true`
 
 All options are optional, if `queue_name` not specified will be used default queue `default`
