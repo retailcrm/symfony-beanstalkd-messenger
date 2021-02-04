@@ -1,5 +1,5 @@
 {
-    "name": "retailcrm/symfony-beansltalkd-messenger",
+    "name": "retailcrm/symfony-beanstalkd-messenger",
     "description": "Symfony Beanstalkd Messenger Bridge",
     "type": "symfony-bridge",
     "license": "MIT",
