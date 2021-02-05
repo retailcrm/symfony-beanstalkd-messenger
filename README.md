@@ -32,9 +32,18 @@ framework:
             'App\Message\MyMessage': async
 ```
 
+* add transport factory in `config/services.yml`
+
+```yaml
+services:
+# ...
+    RetailCrm\Messenger\Beanstalkd\Transport\BeanstalkTransportFactory:
+        tags: [messenger.transport_factory]
+```
+
 ## Allowed transport options
 
-* `queue_name` - tube name in beanstalkd
+* `tube_name` - tube name in beanstalkd
 
 * `timeout` - timeout for receiving jobs from tube. Default - 0
 
@@ -42,4 +51,4 @@ framework:
 
 * `not_send_if_exists` - do not send a job to the queue only if such a job is already exist. Default - `true`
 
-All options are optional, if `queue_name` not specified will be used default queue `default`
+All options are optional, if `tube_name` not specified will be used default queue `default`

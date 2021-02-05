@@ -48,7 +48,7 @@ class BeanstalkSender implements SenderInterface
             $delay = $delayStamp->getDelay();
         }
 
-        $message = $this->connection->serializeJob($encodedMessage['body'], $encodedMessage['headers']);
+        $message = $this->connection->serializeJob($encodedMessage['body'], $encodedMessage['headers'] ?? []);
 
         if ($this->connection->isNotSendIfExists()) {
             $this->sendIfNotExist($message, $delay);
