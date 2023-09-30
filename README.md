@@ -49,6 +49,28 @@ services:
 
 * `ttr` - ttr value for jobs. Default - 60
 
-* `not_send_if_exists` - do not send a job to the queue only if such a job is already exist. Default - `true`
+* `not_send_if_exists` - do not send a job to the queue only if such a job is already exist. Default - `false`
 
-All options are optional, if `tube_name` not specified will be used default queue `default`
+All options are optional, if `tube_name` not specified will be used default queue `default`.
+
+The `not_send_if_exists` option will only work if lock storage is specified. To do this, you need to customize the `BeanstalkTransportFactory` by adding a call to the `setLockStorage` method
+```php
+class MyBeanstalkTransportFactory extends BeanstalkTransportFactory
+//...
+public function createTransport(string $dsn, array $options, SerializerInterface $serializer): TransportInterface
+{
+    return new BeanstalkTransport(
+        Connection::fromDsn($dsn, $options)->setLockStorage($this->lockStorage),
+        $serializer
+    );
+}
+//...
+```
+and add your custom transport factory in `config/services.yml`
+```yaml
+services:
+# ...
+    App\Messenger\Custom\MyBeanstalkTransportFactory:
+        tags: [messenger.transport_factory]
+```
+Your lock storage class must implement `RetailCrm\Messenger\Beanstalkd\Storage\LockStorageInterface`.

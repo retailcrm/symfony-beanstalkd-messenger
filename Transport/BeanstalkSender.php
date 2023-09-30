@@ -50,7 +50,7 @@ class BeanstalkSender implements SenderInterface
 
         $message = $this->connection->serializeJob($encodedMessage['body'], $encodedMessage['headers'] ?? []);
 
-        if ($this->connection->isNotSendIfExists()) {
+        if ($this->connection->isNotSendIfExists() && null !== $this->connection->getLockStorage()) {
             $this->sendIfNotExist($message, $delay);
         } else {
             $this->connection->send($message, $delay);
@@ -61,61 +61,10 @@ class BeanstalkSender implements SenderInterface
 
     private function sendIfNotExist(string $jobData, int $delay): void
     {
-        $allJobs = $this->getAllJobsInTube();
-        $compareJobs = false;
+        $messageKey = hash('crc32', $jobData);
 
-        foreach ($allJobs as $job) {
-            if ($job === $jobData) {
-                $compareJobs = true;
-
-                break;
-            }
-        }
-
-        if (!$compareJobs) {
+        if ($this->connection->getLockStorage()->setLock($messageKey)) {
             $this->connection->send($jobData, $delay);
         }
-    }
-
-    /**
-     * Get all jobs in tube
-     *
-     * @return array
-     */
-    private function getAllJobsInTube(): array
-    {
-        $info = [];
-
-        try {
-            /** @var ArrayResponse $response */
-            $response = $this->connection->getClient()->statsTube($this->connection->getTube());
-            $stats = $response->getArrayCopy();
-        } catch (ServerException $exception) {
-            return [];
-        }
-
-        $readyJobs = [];
-
-        $this->connection->getClient()->watchOnly($this->connection->getTube());
-
-        for ($i = 0; $i < $stats['current-jobs-ready']; $i++) {
-            try {
-                $job = $this->connection->getClient()->reserveWithTimeout(1);
-            } catch (Throwable $exception) {
-                continue;
-            }
-
-            if (null !== $job) {
-                $readyJobs[] = $job;
-
-                $info[$job->getId()] = $job->getData();
-            }
-        }
-
-        foreach ($readyJobs as $readyJob) {
-            $this->connection->getClient()->release($readyJob);
-        }
-
-        return $info;
     }
 }

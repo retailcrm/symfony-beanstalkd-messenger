@@ -2,6 +2,7 @@
 
 namespace RetailCrm\Messenger\Beanstalkd\Transport;
 
+use RetailCrm\Messenger\Beanstalkd\Storage\LockStorageInterface;
 use Pheanstalk\Contract\JobIdInterface;
 use Pheanstalk\Contract\PheanstalkInterface;
 use Pheanstalk\Job;
@@ -21,7 +22,7 @@ class Connection
         'tube_name' => PheanstalkInterface::DEFAULT_TUBE,
         'timeout' => 0,
         'ttr' => PheanstalkInterface::DEFAULT_TTR,
-        'not_send_if_exists' => true,
+        'not_send_if_exists' => false,
     ];
 
     private $client;
@@ -29,6 +30,7 @@ class Connection
     private $timeout;
     private $ttr;
     private $notSendIfExists;
+    private $lockStorage;
 
     /**
      * Connection constructor.
@@ -81,6 +83,18 @@ class Connection
         }
 
         return new self($options, $pheanstalk);
+    }
+
+    public function setLockStorage(LockStorageInterface $storage): self
+    {
+        $this->lockStorage = $storage;
+
+        return $this;
+    }
+
+    public function getLockStorage(): ?LockStorageInterface
+    {
+        return $this->lockStorage;
     }
 
     public function getClient(): PheanstalkInterface
