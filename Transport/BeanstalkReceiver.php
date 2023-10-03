@@ -38,6 +38,11 @@ class BeanstalkReceiver implements ReceiverInterface
 
         $message = $this->connection->deserializeJob($pheanstalkEnvelope->getData());
 
+        if (null !== $this->connection->getLockStorage()) {
+            $messageKey = hash('crc32', $pheanstalkEnvelope->getData());
+            $this->connection->getLockStorage()->releaseLock($messageKey);
+        }
+
         try {
             $envelope = $this->serializer->decode([
                 'body' => $message['body'],
